@@ -1,7 +1,7 @@
 Apache Spark on Docker
 ==========
 
-This repository contains a docker file to build a docker image with Apache Spark. This docker image depends on our previous Hadoop docker image, available at the SequenceIQ GitHub page.
+This repository contains a Docker file to build a Docker image with Apache Spark. This Docker image depends on our previous [Hadoop Docker](https://github.com/sequenceiq/hadoop-docker) image, available at the SequenceIQ [GitHub](https://github.com/sequenceiq) page.
 The base Hadoop docker image is also available as an official Docker image (sequenceiq/hadoop-docker).
 
 ## Building the image
