@@ -32,7 +32,8 @@ scala> sc.parallelize(1 to 1000).count()
 
 There are two deploy modes that can be used to launch Spark applications on YARN. In yarn-cluster mode, the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application. In yarn-client mode, the driver runs in the client process, and the application master is only used for requesting resources from YARN.
 
-Estimating Pi (yarn-cluster mode): :
+Estimating Pi (yarn-cluster mode): 
+
 ```
 cd /usr/local/spark
 
@@ -41,6 +42,7 @@ cd /usr/local/spark
 ```
 
 Estimating Pi (yarn-client mode):
+
 ```
 cd /usr/local/spark
 
