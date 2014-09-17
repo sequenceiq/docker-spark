@@ -11,17 +11,17 @@ docker pull sequenceiq/spark
 
 ## Building the image
 ```
-docker build --rm -t sequenceiq/spark .
+docker build --rm -t sequenceiq/spark:1.1.0 .
 ```
 
 ## Running the image
 ```
-docker run -i -t -h sandbox sequenceiq/spark /etc/bootstrap.sh -bash
+docker run -i -t -h sandbox sequenceiq/spark:1.1.0 /etc/bootstrap.sh -bash
 ```
 
 ## Versions
 ```
-Hadoop 2.4.1 and Apache Spark v1.0.1-rc2
+Hadoop 2.5.1 and Apache Spark v1.1.0
 ```
 
 ## Testing
