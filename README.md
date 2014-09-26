@@ -6,7 +6,7 @@ The base Hadoop Docker image is also available as an official [Docker image](htt
 
 ##Pull the image from Docker Repository
 ```
-docker pull sequenceiq/spark::1.1.0
+docker pull sequenceiq/spark:1.1.0
 ```
 
 ## Building the image
