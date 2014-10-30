@@ -26,7 +26,11 @@ Hadoop 2.5.1 and Apache Spark v1.1.0
 
 ## Testing
 
-You can run one of the stock examples:
+There are two deploy modes that can be used to launch Spark applications on YARN. 
+
+### YARN-client mode
+
+In yarn-client mode, the driver runs in the client process, and the application master is only used for requesting resources from YARN.
 
 ```
 cd /usr/local/spark
@@ -36,8 +40,9 @@ cd /usr/local/spark
 # execute the the following command which should return 1000
 scala> sc.parallelize(1 to 1000).count()
 ```
+### YARN-cluster mode
 
-There are two deploy modes that can be used to launch Spark applications on YARN. In yarn-cluster mode, the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application. In yarn-client mode, the driver runs in the client process, and the application master is only used for requesting resources from YARN.
+In yarn-cluster mode, the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application.
 
 Estimating Pi (yarn-cluster mode): 
 
