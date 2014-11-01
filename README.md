@@ -33,9 +33,8 @@ There are two deploy modes that can be used to launch Spark applications on YARN
 In yarn-client mode, the driver runs in the client process, and the application master is only used for requesting resources from YARN.
 
 ```
-cd /usr/local/spark
 # run the spark shell
-./bin/spark-shell --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1
+spark-shell --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1
 
 # execute the the following command which should return 1000
 scala> sc.parallelize(1 to 1000).count()
@@ -47,17 +46,13 @@ In yarn-cluster mode, the Spark driver runs inside an application master process
 Estimating Pi (yarn-cluster mode): 
 
 ```
-cd /usr/local/spark
-
 # execute the the following command which should write the "Pi is roughly 3.1418" into the logs
-./bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn-cluster --driver-memory 1g --executor-memory 1g --executor-cores 1 ./lib/spark-examples-1.1.0-hadoop2.4.0.jar
+spark-submit --class org.apache.spark.examples.SparkPi --master yarn-cluster --driver-memory 1g --executor-memory 1g --executor-cores 1 ./lib/spark-examples-1.1.0-hadoop2.4.0.jar
 ```
 
 Estimating Pi (yarn-client mode):
 
 ```
-cd /usr/local/spark
-
 # execute the the following command which should print the "Pi is roughly 3.1418" to the screen
-./bin/spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1 ./lib/spark-examples-1.1.0-hadoop2.4.0.jar
+spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1 ./lib/spark-examples-1.1.0-hadoop2.4.0.jar
 ```
