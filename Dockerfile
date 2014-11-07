@@ -11,7 +11,7 @@ RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_
 ENV YARN_CONF_DIR $HADOOP_PREFIX/etc/hadoop
 ENV SPARK_JAR hdfs:///spark/spark-assembly-1.1.0-hadoop2.4.0.jar
 ENV SPARK_HOME /usr/local/spark
-ENV HADOOP_USER_NAME hdfs
+#ENV HADOOP_USER_NAME hdfs
 ENV PATH $PATH:$SPARK_HOME/bin:$HADOOP_PREFIX/bin
 
 CMD ["/etc/bootstrap.sh", "-d"]
