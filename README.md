@@ -21,7 +21,7 @@ docker run -i -t -h sandbox sequenceiq/spark:1.1.1 /etc/bootstrap.sh -bash
 
 ## Versions
 ```
-Hadoop 2.5.1 and Apache Spark v1.1.1
+Hadoop 2.6.0 and Apache Spark v1.1.1
 ```
 
 ## Testing
