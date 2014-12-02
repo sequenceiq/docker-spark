@@ -6,27 +6,27 @@ The base Hadoop Docker image is also available as an official [Docker image](htt
 
 ##Pull the image from Docker Repository
 ```
-docker pull sequenceiq/spark:1.1.0
+docker pull sequenceiq/spark:1.1.1
 ```
 
 ## Building the image
 ```
-docker build --rm -t sequenceiq/spark:1.1.0 .
+docker build --rm -t sequenceiq/spark:1.1.1 .
 ```
 
 ## Running the image
 ```
-docker run -i -t -h sandbox sequenceiq/spark:1.1.0 /etc/bootstrap.sh -bash
+docker run -i -t -h sandbox sequenceiq/spark:1.1.1 /etc/bootstrap.sh -bash
 ```
 
 ## Versions
 ```
-Hadoop 2.5.1 and Apache Spark v1.1.0
+Hadoop 2.5.1 and Apache Spark v1.1.1
 ```
 
 ## Testing
 
-There are two deploy modes that can be used to launch Spark applications on YARN. 
+There are two deploy modes that can be used to launch Spark applications on YARN.
 
 ### YARN-client mode
 
@@ -43,16 +43,16 @@ scala> sc.parallelize(1 to 1000).count()
 
 In yarn-cluster mode, the Spark driver runs inside an application master process which is managed by YARN on the cluster, and the client can go away after initiating the application.
 
-Estimating Pi (yarn-cluster mode): 
+Estimating Pi (yarn-cluster mode):
 
 ```
 # execute the the following command which should write the "Pi is roughly 3.1418" into the logs
-spark-submit --class org.apache.spark.examples.SparkPi --master yarn-cluster --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.1.0-hadoop2.4.0.jar
+spark-submit --class org.apache.spark.examples.SparkPi --master yarn-cluster --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.1.1-hadoop2.4.0.jar
 ```
 
 Estimating Pi (yarn-client mode):
 
 ```
 # execute the the following command which should print the "Pi is roughly 3.1418" to the screen
-spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.1.0-hadoop2.4.0.jar
+spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.1.1-hadoop2.4.0.jar
 ```
