@@ -6,22 +6,22 @@ The base Hadoop Docker image is also available as an official [Docker image](htt
 
 ##Pull the image from Docker Repository
 ```
-docker pull sequenceiq/spark:1.1.1
+docker pull sequenceiq/spark:1.1.0-ubuntu
 ```
 
 ## Building the image
 ```
-docker build --rm -t sequenceiq/spark:1.1.1 .
+docker build --rm -t sequenceiq/spark:1.1.0-ubuntu .
 ```
 
 ## Running the image
 ```
-docker run -i -t -h sandbox sequenceiq/spark:1.1.1 /etc/bootstrap.sh -bash
+docker run -i -t -h sandbox sequenceiq/spark:1.1.0-ubuntu /etc/bootstrap.sh -bash
 ```
 
 ## Versions
 ```
-Hadoop 2.6.0 and Apache Spark v1.1.1
+Ubuntu 14.04 Hadoop 2.6.0 and Apache Spark v1.1.1 
 ```
 
 ## Testing
