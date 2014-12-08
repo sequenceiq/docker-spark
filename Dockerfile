@@ -1,4 +1,4 @@
-FROM sequenceiq/hadoop-docker:2.6.0
+FROM sequenceiq/hadoop-ubuntu:2.6.0
 MAINTAINER SequenceIQ
 
 RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-1.1.1-bin-hadoop2.4.tgz | tar -xz -C /usr/local/
