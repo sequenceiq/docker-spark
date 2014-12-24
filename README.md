@@ -6,22 +6,22 @@ The base Hadoop Docker image is also available as an official [Docker image](htt
 
 ##Pull the image from Docker Repository
 ```
-docker pull sequenceiq/spark:1.1.1
+docker pull sequenceiq/spark:1.2.0
 ```
 
 ## Building the image
 ```
-docker build --rm -t sequenceiq/spark:1.1.1 .
+docker build --rm -t sequenceiq/spark:1.2.0 .
 ```
 
 ## Running the image
 ```
-docker run -i -t -h sandbox sequenceiq/spark:1.1.1 /etc/bootstrap.sh -bash
+docker run -i -t -h sandbox sequenceiq/spark:1.2.0 /etc/bootstrap.sh -bash
 ```
 
 ## Versions
 ```
-Hadoop 2.6.0 and Apache Spark v1.1.1
+Hadoop 2.6.0 and Apache Spark v1.2.0
 ```
 
 ## Testing
@@ -47,7 +47,7 @@ Estimating Pi (yarn-cluster mode):
 
 ```
 # execute the the following command which should write the "Pi is roughly 3.1418" into the logs
-spark-submit --class org.apache.spark.examples.SparkPi --master yarn-cluster --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.1.1-hadoop2.4.0.jar
+spark-submit --class org.apache.spark.examples.SparkPi --master yarn-cluster --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.2.0-hadoop2.4.0.jar
 ```
 
 Estimating Pi (yarn-client mode):
