@@ -13,4 +13,12 @@ ENV YARN_CONF_DIR $HADOOP_PREFIX/etc/hadoop
 ENV SPARK_JAR hdfs:///spark/spark-assembly-1.2.0-hadoop2.4.0.jar
 ENV PATH $PATH:$SPARK_HOME/bin:$HADOOP_PREFIX/bin
 
+#This enables ssh sessions from remote host.
+RUN echo "root:root" | chpasswd
+RUN echo "Port 22" >> /etc/ssh/sshd_config
+
+#Adding spark and hadoop paths for remote ssh sessions.
+RUN echo "export PATH=$PATH" >> /root/.bash_profile
+RUN echo "export PATH=$PATH" >> /root/.bashrc
+
 CMD ["/etc/bootstrap.sh", "-d"]
