@@ -16,7 +16,11 @@ docker build --rm -t sequenceiq/spark:1.2.0 .
 
 ## Running the image
 ```
-docker run -i -t -h sandbox sequenceiq/spark:1.2.0 /etc/bootstrap.sh -bash
+docker run -i -t -h sandbox sequenceiq/spark:1.2.0 bash
+```
+or
+```
+docker run -d -h sandbox sequenceiq/spark:1.2.0 -d
 ```
 
 ## Versions
