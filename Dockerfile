@@ -1,4 +1,4 @@
-FROM sequenceiq/hadoop-docker:2.6.0
+FROM sequenceiq/hadoop-ubuntu:2.6.0
 MAINTAINER SequenceIQ
 
 RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-1.2.0-bin-hadoop2.4.tgz | tar -xz -C /usr/local/
@@ -16,5 +16,9 @@ ENV PATH $PATH:$SPARK_HOME/bin:$HADOOP_PREFIX/bin
 COPY bootstrap.sh /etc/bootstrap.sh
 RUN chown root.root /etc/bootstrap.sh
 RUN chmod 700 /etc/bootstrap.sh
+
+# ipython support
+ENV PYSPARK_DRIVER_PYTHON ipython
+RUN apt-get install -y ipython
 
 ENTRYPOINT ["/etc/bootstrap.sh"]
