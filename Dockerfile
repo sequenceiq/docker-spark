@@ -1,6 +1,7 @@
 FROM sequenceiq/hadoop-ubuntu:2.6.0
 MAINTAINER SequenceIQ
 
+RUN apt-get install -y ipython
 RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-1.2.1-bin-hadoop2.4.tgz | tar -xz -C /usr/local/
 RUN cd /usr/local && ln -s spark-1.2.1-bin-hadoop2.4 spark
 ENV SPARK_HOME /usr/local/spark
@@ -12,5 +13,6 @@ RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_
 ENV YARN_CONF_DIR $HADOOP_PREFIX/etc/hadoop
 ENV SPARK_JAR hdfs:///spark/spark-assembly-1.2.1-hadoop2.4.0.jar
 ENV PATH $PATH:$SPARK_HOME/bin:$HADOOP_PREFIX/bin
+ENV PYSPARK_DRIVER_PYTHON ipython
 
 CMD ["/etc/bootstrap.sh", "-d"]
