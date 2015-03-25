@@ -1,6 +1,7 @@
 FROM sequenceiq/hadoop-docker:2.6.0
 MAINTAINER SequenceIQ
 
+#support for Hadoop 2.4.0+
 RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-1.3.0-bin-hadoop2.4.tgz | tar -xz -C /usr/local/
 RUN cd /usr/local && ln -s spark-1.3.0-bin-hadoop2.4 spark
 ENV SPARK_HOME /usr/local/spark
