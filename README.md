@@ -15,12 +15,11 @@ docker build --rm -t sequenceiq/spark:1.4.0 .
 ```
 
 ## Running the image
+
+* in your /etc/hosts file add $(boot2docker ip) as host 'sandbox' to make it easier to access your sandbox UI
+* open UI ports when starting image
 ```
-docker run -i -t -h sandbox sequenceiq/spark:1.4.0 bash
-```
-or
-```
-docker run -d -h sandbox sequenceiq/spark:1.4.0 -d
+docker run -it -p 8088:8088 -p 8042:8042 -p 8080:8080 -p 7077:7077 -p 6066:6066 -h sandbox sequenceiq/spark:1.4.0 bash
 ```
 
 ## Versions
@@ -38,6 +37,7 @@ In yarn-client mode, the driver runs in the client process, and the application 
 
 ```
 # run the spark shell
+# set memory limits appropriately or spark context will not be able to start
 spark-shell --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1
 
 # execute the the following command which should return 1000
@@ -51,12 +51,12 @@ Estimating Pi (yarn-cluster mode):
 
 ```
 # execute the the following command which should write the "Pi is roughly 3.1418" into the logs
-spark-submit --class org.apache.spark.examples.SparkPi --master yarn-cluster --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.4.0-hadoop2.4.0.jar
+spark-submit --class org.apache.spark.examples.SparkPi --master yarn-cluster --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.4.0-hadoop2.6.0.jar
 ```
 
 Estimating Pi (yarn-client mode):
 
 ```
 # execute the the following command which should print the "Pi is roughly 3.1418" to the screen
-spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.4.0-hadoop2.4.0.jar
+spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.4.0-hadoop2.6.0.jar
 ```
