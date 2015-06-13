@@ -16,6 +16,7 @@ docker build --rm -t sequenceiq/spark:1.4.0 .
 
 ## Running the image
 
+* if using boot2docker make sure your VM has more than 2GB memory
 * in your /etc/hosts file add $(boot2docker ip) as host 'sandbox' to make it easier to access your sandbox UI
 * open UI ports when starting image
 ```
