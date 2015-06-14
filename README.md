@@ -6,17 +6,21 @@ The base Hadoop Docker image is also available as an official [Docker image](htt
 
 ##Pull the image from Docker Repository
 ```
-docker pull sequenceiq/spark:1.3.1
+docker pull sequenceiq/spark:1.4.0
 ```
 
 ## Building the image
 ```
-docker build --rm -t sequenceiq/spark:1.3.1 .
+docker build --rm -t sequenceiq/spark:1.4.0 .
 ```
 
 ## Running the image
+
+* if using boot2docker make sure your VM has more than 2GB memory
+* in your /etc/hosts file add $(boot2docker ip) as host 'sandbox' to make it easier to access your sandbox UI
+* open yarn UI ports when running container
 ```
-docker run -i -t -h sandbox sequenceiq/spark:1.3.1 bash
+docker run -it -p 8088:8088 -p 8042:8042 -h sandbox sequenceiq/spark:1.4.0 bash
 ```
 or
 ```
@@ -25,7 +29,7 @@ docker run -d -h sandbox sequenceiq/spark:1.3.1 -d
 
 ## Versions
 ```
-Hadoop 2.6.0 and Apache Spark v1.3.1
+Hadoop 2.6.0 and Apache Spark v1.4.0
 ```
 
 ## Testing
@@ -38,7 +42,11 @@ In yarn-client mode, the driver runs in the client process, and the application 
 
 ```
 # run the spark shell
-spark-shell --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1
+spark-shell \
+--master yarn-client \
+--driver-memory 1g \
+--executor-memory 1g \
+--executor-cores 1
 
 # execute the the following command which should return 1000
 scala> sc.parallelize(1 to 1000).count()
@@ -51,12 +59,26 @@ Estimating Pi (yarn-cluster mode):
 
 ```
 # execute the the following command which should write the "Pi is roughly 3.1418" into the logs
-spark-submit --class org.apache.spark.examples.SparkPi --master yarn-cluster --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.3.1-hadoop2.4.0.jar
+# note you must specify --files argument in cluster mode to enable metrics
+spark-submit \
+--class org.apache.spark.examples.SparkPi \
+--files $SPARK_HOME/conf/metrics.properties \
+--master yarn-cluster \
+--driver-memory 1g \
+--executor-memory 1g \
+--executor-cores 1 \
+$SPARK_HOME/lib/spark-examples-1.4.0-hadoop2.6.0.jar
 ```
 
 Estimating Pi (yarn-client mode):
 
 ```
 # execute the the following command which should print the "Pi is roughly 3.1418" to the screen
-spark-submit --class org.apache.spark.examples.SparkPi --master yarn-client --driver-memory 1g --executor-memory 1g --executor-cores 1 $SPARK_HOME/lib/spark-examples-1.3.1-hadoop2.4.0.jar
+spark-submit \
+--class org.apache.spark.examples.SparkPi \
+--master yarn-client \
+--driver-memory 1g \
+--executor-memory 1g \
+--executor-cores 1 \
+$SPARK_HOME/lib/spark-examples-1.4.0-hadoop2.6.0.jar
 ```
