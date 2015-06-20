@@ -24,7 +24,7 @@ docker run -it -p 8088:8088 -p 8042:8042 -h sandbox sequenceiq/spark:1.4.0 bash
 ```
 or
 ```
-docker run -d -h sandbox sequenceiq/spark:1.3.1 -d
+docker run -d -h sandbox sequenceiq/spark:1.4.0 -d
 ```
 
 ## Versions
