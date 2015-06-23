@@ -29,7 +29,7 @@ docker run -d -h sandbox sequenceiq/spark:1.4.0 -d
 
 ## Versions
 ```
-Hadoop 2.6.0 and Apache Spark v1.4.0
+Hadoop 2.6.0 and Apache Spark v1.4.0 on Centos 
 ```
 
 ## Testing
