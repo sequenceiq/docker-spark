@@ -86,3 +86,16 @@ spark-submit \
 --executor-cores 1 \
 $SPARK_HOME/lib/spark-examples-1.6.1-hadoop2.6.0.jar
 ```
+
+### Submitting from the outside of the container
+To use Spark from outside of the container it is necessary to set the YARN_CONF_DIR environment variable to directory with a configuration appropriate for the docker. The repository contains such configuration in the yarn-remote-client directory.
+
+```
+export YARN_CONF_DIR="`pwd`/yarn-remote-client"
+```
+
+Docker's HDFS can be accessed only by root. When submitting Spark applications from outside of the cluster, and from a user different than root, it is necessary to configure the HADOOP_USER_NAME variable so that root user is used.
+
+```
+export HADOOP_USER_NAME=root
+```
