@@ -1,14 +1,14 @@
-FROM poad/hadoop-docker:2.7.2
+FROM poad/hadoop-docker:2.7.3
 MAINTAINER Kenji Saito
 
-#support for Hadoop 2.7.2
-RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-1.6.2-bin-hadoop2.6.tgz | tar -xz -C /usr/local/
-RUN cd /usr/local && ln -s spark-1.6.2-bin-hadoop2.6 spark
+#support for Hadoop 2.7.3
+RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-2.0.2-bin-hadoop2.7.tgz | tar -xz -C /usr/local/
+RUN cd /usr/local && ln -s spark-2.0.2-bin-hadoop2.7 spark
 ENV SPARK_HOME /usr/local/spark
 RUN mkdir $SPARK_HOME/yarn-remote-client
 ADD yarn-remote-client $SPARK_HOME/yarn-remote-client
 
-RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_PREFIX/bin/hdfs dfs -put $SPARK_HOME-1.6.2-bin-hadoop2.6/lib /spark
+RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_PREFIX/bin/hdfs dfs -put $SPARK_HOME-2.0.2-bin-hadoop2.7/jars /spark
 
 ENV YARN_CONF_DIR $HADOOP_PREFIX/etc/hadoop
 ENV PATH $PATH:$SPARK_HOME/bin:$HADOOP_PREFIX/bin
