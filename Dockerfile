@@ -154,6 +154,10 @@ RUN sed s/HOSTNAME/localhost/ $HADOOP_CONF_DIR/core-site.xml.template > $HADOOP_
 
 EXPOSE 50020 50090 50070 50010 50075 8031 8032 8033 8040 8042 49707 22 8088 8030
 
+# Temporarily disabled
+#CMD ["bash", "bootstrap.sh"]
+
+# Just run tests
 CMD ["bash", "test_all.sh"]
 
 ###################################################
