@@ -1,4 +1,4 @@
-FROM ubuntu:15.04
+FROM trueprint/sparketl:latest
 MAINTAINER Aaron Steers
 
 LABEL Name=docker-spark
