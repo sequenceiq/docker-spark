@@ -69,7 +69,7 @@ deployment:
           echo "Pushing image as 'trueprint/docker-spark:$BRANCHTAG'" &&
           docker tag -f trueprint/docker-spark:latest trueprint/docker-spark:$BRANCHTAG &&
           docker push trueprint/docker-spark:$BRANCHTAG
-  staging:
+  prod:
     branch: master
     commands:
         #Push docker images (prod):
