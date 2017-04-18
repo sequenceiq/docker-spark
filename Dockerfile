@@ -1,5 +1,5 @@
 FROM ubuntu:15.04
-MAINTAINER Aaron Steers
+MAINTAINER Aaron Steers "asteers@arivale.com"
 
 LABEL Name=docker-spark
 LABEL Version=1.0
@@ -167,3 +167,26 @@ CMD ["bash", "test_all.sh"]
 
 # format a new distributed filesystem
 RUN $HADOOP_HOME/bin/hdfs namenode -format
+
+###############################
+## SECTION FOUR: Testing ######
+###############################
+
+# # passwordless ssh
+# RUN rm -f /etc/ssh/ssh_host_dsa_key /etc/ssh/ssh_host_rsa_key /root/.ssh/id_rsa && \
+#     ssh-keygen -q -N "" -t dsa -f /etc/ssh/ssh_host_dsa_key && \
+#     ssh-keygen -q -N "" -t rsa -f /etc/ssh/ssh_host_rsa_key && \
+#     ssh-keygen -q -N "" -t rsa -f /root/.ssh/id_rsa && \
+#     cp /root/.ssh/id_rsa.pub /root/.ssh/authorized_keys
+# # Config and test sshd
+# COPY ssh_config /root/.ssh/config
+# RUN chmod 600 /root/.ssh/config && \
+#     chown root:root /root/.ssh/config
+# # fix the 254 error code
+# RUN sed  -i "/^[^#]*UsePAM/ s/.*/#&/"  /etc/ssh/sshd_config && \
+#     echo "UsePAM no" >> /etc/ssh/sshd_config && \
+#     echo "Port 9000" >> /etc/ssh/sshd_config
+# #was: echo "Port 2122" >> /etc/ssh/sshd_config
+
+# RUN service ssh start
+# # Verify connectivity on sshd port
