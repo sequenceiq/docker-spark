@@ -145,9 +145,11 @@ WORKDIR $SPARK_HOME
 
 # Import config and test files
 COPY ./conf $HADOOP_CONF_DIR
-COPY ./test* $SPARK_HOME/
+COPY ./*.sh $SPARK_HOME/
+COPY ./*.py $SPARK_HOME/
 RUN chmod +x $HADOOP_CONF_DIR/*.sh \
-             $SPARK_HOME/test*
+             $SPARK_HOME/*.sh \
+             $SPARK_HOME/*.py
 
 # configure core-site.xml:
 RUN sed s/HOSTNAME/localhost/ $HADOOP_CONF_DIR/core-site.xml.template > $HADOOP_CONF_DIR/core-site.xml

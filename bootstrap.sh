@@ -22,12 +22,12 @@ service sshd start
 #$HADOOP_HOME/sbin/start-yarn.sh
 
 if [[ ! -z $AWS_ACCESS_KEY_ID ]];
-	bash install_creds.sh
+	bash $SPARK_HOME/install_creds.sh
 fi
 
 CMD=${1:-"exit 0"}
 if [[ "$CMD" == testall ]];
-	bash testall.sh
+	bash $SPARK_HOME/testall.sh
 elif [[ "$CMD" == "-d" ]];
 then
 	service sshd stop
