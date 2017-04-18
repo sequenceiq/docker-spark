@@ -71,7 +71,7 @@ RUN apt-get update && \
 RUN curl -O https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
     tar xzf Python-2.7.12.tgz && \
     cd Python-2.7.12 && \
-    ./configure && \
+    ./configure --enable-unicode=ucs4 && \
     make altinstall
 ENV python python2.7
 # Debug available python versions:
