@@ -43,29 +43,30 @@ RUN mkdir -p $JAVA_HOME && \
 # apt-get statements
 RUN apt-get update && \
     apt-get -y -qq install --fix-missing \
-                       build-essential \
-                       bzip2 \
-                       ca-certificates \
-                       checkinstall \
-                       dnsutils \
-                       e2fsprogs \
-                       libbz2-dev \
-                       libc6-dev \
-                       libffi-dev \
-                       libgdbm-dev \
-                       libgss3 \
-                       libncursesw5-dev \
-                       libreadline-gplv2-dev \
-                       libpq-dev \
-                       libssl-dev \
-                       libstdc++6 \
-                       libsqlite3-dev \
-                       locales \
-                       postgresql \
-                       python-dev \
-                       tk-dev \
-                       wget \
-                       zlib1g-dev
+                        build-essential \
+                        bzip2 \
+                        ca-certificates \
+                        checkinstall \
+                        dnsutils \
+                        e2fsprogs \
+                        libbz2-dev \
+                        libc6-dev \
+                        libffi-dev \
+                        libgdbm-dev \
+                        libgss3 \
+                        libncursesw5-dev \
+                        libreadline-gplv2-dev \
+                        libpq-dev \
+                        libssl-dev \
+                        libstdc++6 \
+                        libsqlite3-dev \
+                        locales \
+                        postgresql \
+                        python-dev \
+                        python3-dev \
+                        tk-dev \
+                        wget \
+                        zlib1g-dev
 
 # Update python from 2.7.9 to 2.7.12
 RUN curl -O https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
@@ -73,22 +74,27 @@ RUN curl -O https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz && \
     cd Python-2.7.12 && \
     ./configure --enable-unicode=ucs4 && \
     make altinstall
-ENV python python2.7
-# Debug available python versions:
-#RUN cd /; find -name "python2*"; echo $PATH; find -name "pip2*"; echo $PATH
 
-RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
-    $python get-pip.py && \
-    ln -s /usr/local/bin/pip2.7 /usr/bin/pip27
-ENV pip pip27
+# Install setuptools and pip for python:
+RUN wget https://bootstrap.pypa.io/get-pip.py -O - | python3
+RUN wget https://bootstrap.pypa.io/get-pip.py -O - | python2.7
 
-RUN $pip install awscli \
-                 coverage \
-                 nose \
-                 PyYAML \
-                 psycopg2 \
-                 snowflake-connector-python \
-                 unittest2
+RUN python2.7 -m pip install \
+                awscli \
+                coverage \
+                nose \
+                PyYAML \
+                psycopg2 \
+                snowflake-connector-python \
+                unittest2
+RUN python3 -m pip install \
+                awscli \
+                coverage \
+                nose \
+                PyYAML \
+                psycopg2 \
+                snowflake-connector-python \
+                unittest2
 
 #Configure locales:
 RUN locale-gen en_US en_US.UTF-8; locale-gen it_IT it_IT.UTF-8; dpkg-reconfigure locales
