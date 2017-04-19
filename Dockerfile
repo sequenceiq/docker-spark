@@ -66,7 +66,7 @@ RUN apt-get update && \
                         python3-dev \
                         tk-dev \
                         wget \
-                        unixodbc \
+                        unixodbc-dev \
                         zlib1g-dev
 
 # Update python from 2.7.9 to 2.7.12
