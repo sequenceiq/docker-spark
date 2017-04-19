@@ -66,6 +66,7 @@ RUN apt-get update && \
                         python3-dev \
                         tk-dev \
                         wget \
+                        unixodbc \
                         zlib1g-dev
 
 # Update python from 2.7.9 to 2.7.12
@@ -84,6 +85,7 @@ RUN python2.7 -m pip install \
                 coverage \
                 nose \
                 PyYAML \
+                pyodbc \
                 psycopg2 \
                 snowflake-connector-python \
                 unittest2
@@ -92,6 +94,7 @@ RUN python3 -m pip install \
                 coverage \
                 nose \
                 PyYAML \
+                pyodbc \
                 psycopg2 \
                 snowflake-connector-python \
                 unittest2
