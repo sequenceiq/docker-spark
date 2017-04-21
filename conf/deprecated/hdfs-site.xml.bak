@@ -1,0 +1,14 @@
+<configuration>
+    <property_disabled>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property_disabled>
+    <property_disabled>
+        <name>dfs.namenode.rpc-bind-host</name>
+        <value>0.0.0.0</value>
+    </property_disabled>
+    <property_disabled>
+        <name>dfs.namenode.servicerpc-bind-host</name>
+        <value>0.0.0.0</value>
+    </property_disabled>
+</configuration>

@@ -1,0 +1,78 @@
+general:
+  branches:
+    ignore:
+      - /paused.*/
+
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
+machine:
+  services:
+    - docker
+  environment:
+    SRC : /home/ubuntu/spark-analytics
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+  pre:
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+    - mkdir -p ~/docker; if [[ -e ~/docker/image.tar ]]; then echo "Restoring cache..." && docker load -i ~/docker/image.tar; fi
+  override:
+    - docker pull ubuntu:15.04
+      # docker-spark: Pull, Build, Cache:
+    - IMAGE=docker-spark && echo "Pull:";  docker pull trueprint/$IMAGE:circle-cache || true; docker tag -f trueprint/$IMAGE:circle-cache trueprint/$IMAGE:latest || true
+    - IMAGE=docker-spark && echo "Build:"; cd $SRC/$IMAGE; docker build --rm=false -t trueprint/$IMAGE .
+    - IMAGE=docker-spark && echo "Cache:"; docker tag -f trueprint/$IMAGE trueprint/$IMAGE:circle-cache && docker push trueprint/$IMAGE:circle-cache
+    # Save images and then update docker
+    - >
+        mkdir -p ~/docker &&
+        docker save
+        trueprint/docker-spark:circle-cache >
+        ~/docker/image.tar
+    - >
+        docker version &&
+        sudo stop docker &&
+        curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0 &&
+        sudo start docker &&
+        docker version
+      # Push empty file in tests/output
+    - mkdir -p /tmp/tests/output; touch /tmp/tests/output/this-is-a-test.txt
+
+
+test:
+  override:
+    - ls -l /tmp/tests/output
+    - >
+        docker run
+        -e CIRCLECI
+        -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY
+        -v /tmp/tests/output:/var/docker-spark/output
+        trueprint/docker-spark
+    - ls -l /tmp/tests/output
+    - cp /tmp/tests/output/* $CIRCLE_TEST_REPORTS
+
+deployment:
+  beta:
+    branch: /(feat|hotfix)\/.*/
+    commands:
+        #Push docker images (beta):
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - >
+          docker tag trueprint/docker-spark:latest
+          trueprint/docker-spark:beta &&
+          docker push trueprint/docker-spark:beta
+      - >
+          BRANCHTAG=$(echo $CIRCLE_BRANCH | sed -e 's/\//_/g') &&
+          echo "Pushing image as 'trueprint/docker-spark:$BRANCHTAG'" &&
+          docker tag -f trueprint/docker-spark:latest trueprint/docker-spark:$BRANCHTAG &&
+          docker push trueprint/docker-spark:$BRANCHTAG
+  prod:
+    branch: master
+    commands:
+        #Push docker images (prod):
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - >
+          docker push trueprint/docker-spark:latest
