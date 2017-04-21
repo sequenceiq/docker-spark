@@ -62,7 +62,7 @@ deployment:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - >
           docker tag trueprint/docker-spark:latest
-          trueprint/docker-sparks:beta &&
+          trueprint/docker-spark:beta &&
           docker push trueprint/docker-spark:beta
       - >
           BRANCHTAG=$(echo $CIRCLE_BRANCH | sed -e 's/\//_/g') &&
