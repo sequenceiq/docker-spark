@@ -13,13 +13,17 @@ cd $HADOOP_PREFIX/share/hadoop/common ; for cp in ${ACP//,/ }; do  echo == $cp; 
 sed s/HOSTNAME/$HOSTNAME/ /usr/local/hadoop/etc/hadoop/core-site.xml.template > /usr/local/hadoop/etc/hadoop/core-site.xml
 
 # setting spark defaults
-echo spark.yarn.jar hdfs:///spark/spark-assembly-1.6.0-hadoop2.6.0.jar > $SPARK_HOME/conf/spark-defaults.conf
 cp $SPARK_HOME/conf/metrics.properties.template $SPARK_HOME/conf/metrics.properties
+
+if [ ! -e /tmp/spark-events ]
+then
+ mkdir -p /tmp/spark-events
+fi 
 
 service sshd start
 $HADOOP_PREFIX/sbin/start-dfs.sh
 $HADOOP_PREFIX/sbin/start-yarn.sh
-
+${SPARK_HOME}/sbin/start-history-server.sh
 
 
 CMD=${1:-"exit 0"}
