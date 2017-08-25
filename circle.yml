@@ -75,7 +75,7 @@ deployment:
           docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:$VERSION
           docker push $DOCKERHUB_ROOT/$IMAGE:$VERSION
       - |
-          V=( ${VERSION//./ } )
+          VERSION=$(cat VERSION) && V=( ${VERSION//./ } )
           echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:${V[0]}.${V[1]}-beta..."
           docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}-beta"
           docker push $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}-beta"
@@ -90,7 +90,7 @@ deployment:
           docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:$VERSION
           docker push $DOCKERHUB_ROOT/$IMAGE:$VERSION
       - |
-          V=( ${VERSION//./ } )  # replace points, split into version array
+          VERSION=$(cat VERSION) && V=( ${VERSION//./ } )  # replace points, split into version array
           echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:${V[0]}.${V[1]}..."
           docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}"
           docker push $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}"
