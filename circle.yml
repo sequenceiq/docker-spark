@@ -73,7 +73,7 @@ deployment:
           docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:$VERSION
           docker push $DOCKERHUB_ROOT/sparketl:$VERSION
       - |
-          V=( ${VERSION//./ } )  # replace points, split into version array
+          V=( ${VERSION//./ } )
           echo "Pushing image as $DOCKERHUB_ROOT/sparketl:${V[0]}.${V[1]}-beta..."
           docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}-beta"
           docker push $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}-beta"
