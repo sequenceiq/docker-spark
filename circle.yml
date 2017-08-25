@@ -21,6 +21,7 @@ dependencies:
     - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
     - mkdir -p ~/docker; if [[ -e ~/docker/image.tar ]]; then echo "Restoring cache..." && docker load -i ~/docker/image.tar; fi
   override:
+    - echo `cat VERSION | sed -e "s/x/${CIRCLE_BUILD_NUM}/g"` > VERSION && echo "VERSION=$(cat VERSION)"
     - docker pull ubuntu:15.04
       # docker-spark: Pull, Build, Cache:
     - IMAGE=docker-spark && echo "Pull:";  docker pull trueprint/$IMAGE:circle-cache || true; docker tag -f trueprint/$IMAGE:circle-cache trueprint/$IMAGE:latest || true
@@ -74,5 +75,9 @@ deployment:
     commands:
         #Push docker images (prod):
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - > 
+          VERSION=$(cat VERSION)
+          docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:$VERSION
+          docker push $DOCKERHUB_ROOT/sparketl:$VERSION
       - >
           docker push trueprint/docker-spark:latest
