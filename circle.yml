@@ -14,6 +14,7 @@ machine:
   environment:
     SRC:            /home/ubuntu/spark-analytics
     DOCKERHUB_ROOT: trueprint
+    IMAGE:          docker-spark
 
 dependencies:
   cache_directories:
@@ -24,14 +25,14 @@ dependencies:
   override:
     - echo `cat VERSION | sed -e "s/x/${CIRCLE_BUILD_NUM}/g"` > VERSION && echo "VERSION=$(cat VERSION)"
     - docker pull ubuntu:15.04
-      # docker-spark: Pull, Build, Cache:
-    - IMAGE=docker-spark && echo "Pull:";  docker pull trueprint/$IMAGE:circle-cache || true; docker tag -f trueprint/$IMAGE:circle-cache trueprint/$IMAGE:latest || true
-    - IMAGE=docker-spark && echo "Build:"; cd $SRC/$IMAGE; docker build --rm=false -t trueprint/$IMAGE .
-    - IMAGE=docker-spark && echo "Cache:"; docker tag -f trueprint/$IMAGE trueprint/$IMAGE:circle-cache && docker push trueprint/$IMAGE:circle-cache
+      # $IMAGE: Pull, Build, Cache:
+    - echo "Pull:";  docker pull $DOCKERHUB_ROOT/$IMAGE:circle-cache || true; docker tag -f $DOCKERHUB_ROOT/$IMAGE:circle-cache $DOCKERHUB_ROOT/$IMAGE:latest || true
+    - echo "Build:"; cd $SRC/$IMAGE; docker build --rm=false -t $DOCKERHUB_ROOT/$IMAGE .
+    - echo "Cache:"; docker tag -f $DOCKERHUB_ROOT/$IMAGE $DOCKERHUB_ROOT/$IMAGE:circle-cache && docker push $DOCKERHUB_ROOT/$IMAGE:circle-cache
     # Save images and then update docker
     - |
         mkdir -p ~/docker
-        docker save trueprint/docker-spark:circle-cache > ~/docker/image.tar
+        docker save $DOCKERHUB_ROOT/$IMAGE:circle-cache > ~/docker/image.tar
     - |
         docker version
         sudo stop docker
@@ -50,7 +51,7 @@ test:
         -e CIRCLECI
         -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY
         -v /tmp/tests/output:/var/docker-spark/output
-        trueprint/docker-spark
+        $DOCKERHUB_ROOT/$IMAGE
     - ls -l /tmp/tests/output
     - cp /tmp/tests/output/* $CIRCLE_TEST_REPORTS
 
@@ -61,23 +62,23 @@ deployment:
         #Push docker images (beta):
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - |
-          docker tag trueprint/docker-spark:latest trueprint/docker-spark:beta
-          docker push trueprint/docker-spark:beta
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:beta
+          docker push $DOCKERHUB_ROOT/$IMAGE:beta
       - |
           BRANCHTAG=$(echo $CIRCLE_BRANCH | sed -e 's/\//_/g')
-          echo "Pushing image as 'trueprint/docker-spark:$BRANCHTAG'"
-          docker tag -f trueprint/docker-spark:latest trueprint/docker-spark:$BRANCHTAG
-          docker push trueprint/docker-spark:$BRANCHTAG
+          echo "Pushing image as '$DOCKERHUB_ROOT/$IMAGE:$BRANCHTAG'"
+          docker tag -f $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:$BRANCHTAG
+          docker push $DOCKERHUB_ROOT/$IMAGE:$BRANCHTAG
       - |
           VERSION=$(cat VERSION)
-          echo "Pushing image as $DOCKERHUB_ROOT/sparketl:$VERSION..."
-          docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:$VERSION
-          docker push $DOCKERHUB_ROOT/sparketl:$VERSION
+          echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:$VERSION..."
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:$VERSION
+          docker push $DOCKERHUB_ROOT/$IMAGE:$VERSION
       - |
           V=( ${VERSION//./ } )
-          echo "Pushing image as $DOCKERHUB_ROOT/sparketl:${V[0]}.${V[1]}-beta..."
-          docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}-beta"
-          docker push $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}-beta"
+          echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:${V[0]}.${V[1]}-beta..."
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}-beta"
+          docker push $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}-beta"
   prod:
     branch: master
     commands:
@@ -85,13 +86,13 @@ deployment:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - |
           VERSION=$(cat VERSION)
-          echo "Pushing image as $DOCKERHUB_ROOT/sparketl:$VERSION..."
-          docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:$VERSION
-          docker push $DOCKERHUB_ROOT/sparketl:$VERSION
+          echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:$VERSION..."
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:$VERSION
+          docker push $DOCKERHUB_ROOT/$IMAGE:$VERSION
       - |
           V=( ${VERSION//./ } )  # replace points, split into version array
-          echo "Pushing image as $DOCKERHUB_ROOT/sparketl:${V[0]}.${V[1]}..."
-          docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}"
-          docker push $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}"
+          echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:${V[0]}.${V[1]}..."
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}"
+          docker push $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}"
       - |
-          docker push trueprint/docker-spark:latest
+          docker push $DOCKERHUB_ROOT/$IMAGE:latest
