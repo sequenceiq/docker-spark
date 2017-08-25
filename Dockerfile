@@ -137,9 +137,9 @@ ENV PATH $PATH:$SPARK_HOME/bin
 ENV PYTHONPATH $SPARK_HOME/python:$SPARK_HOME/python/build:$SPARK_HOME/python/lib/py4j-0.10.4-src.zip:${PYTHONPATH:-}
 
 # install hadoop bits
-RUN curl -s http://apache.cs.utah.edu/hadoop/common/hadoop-2.7.4/hadoop-2.7.4.tar.gz \
+RUN curl -s http://apache.cs.utah.edu/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.tar.gz \
   | tar -xz -C /usr/local/ && \
-    ln -s /usr/local/hadoop-2.7.4 /usr/local/hadoop
+    ln -s /usr/local/hadoop-2.7.3 /usr/local/hadoop
 
 # install spark bits:
 RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.7.tgz | tar -xz -C /usr/local/ && \
