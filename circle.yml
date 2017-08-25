@@ -28,16 +28,14 @@ dependencies:
     - IMAGE=docker-spark && echo "Build:"; cd $SRC/$IMAGE; docker build --rm=false -t trueprint/$IMAGE .
     - IMAGE=docker-spark && echo "Cache:"; docker tag -f trueprint/$IMAGE trueprint/$IMAGE:circle-cache && docker push trueprint/$IMAGE:circle-cache
     # Save images and then update docker
-    - >
-        mkdir -p ~/docker &&
-        docker save
-        trueprint/docker-spark:circle-cache >
-        ~/docker/image.tar
-    - >
-        docker version &&
-        sudo stop docker &&
-        curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0 &&
-        sudo start docker &&
+    - |
+        mkdir -p ~/docker
+        docker save trueprint/docker-spark:circle-cache > ~/docker/image.tar
+    - |
+        docker version
+        sudo stop docker
+        curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+        sudo start docker
         docker version
       # Push empty file in tests/output
     - mkdir -p /tmp/tests/output; touch /tmp/tests/output/this-is-a-test.txt
@@ -61,21 +59,20 @@ deployment:
     commands:
         #Push docker images (beta):
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - >
-          docker tag trueprint/docker-spark:latest
-          trueprint/docker-spark:beta &&
+      - |
+          docker tag trueprint/docker-spark:latest trueprint/docker-spark:beta
           docker push trueprint/docker-spark:beta
-      - >
-          BRANCHTAG=$(echo $CIRCLE_BRANCH | sed -e 's/\//_/g') &&
-          echo "Pushing image as 'trueprint/docker-spark:$BRANCHTAG'" &&
-          docker tag -f trueprint/docker-spark:latest trueprint/docker-spark:$BRANCHTAG &&
+      - |
+          BRANCHTAG=$(echo $CIRCLE_BRANCH | sed -e 's/\//_/g')
+          echo "Pushing image as 'trueprint/docker-spark:$BRANCHTAG'"
+          docker tag -f trueprint/docker-spark:latest trueprint/docker-spark:$BRANCHTAG
           docker push trueprint/docker-spark:$BRANCHTAG
   prod:
     branch: master
     commands:
         #Push docker images (prod):
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - > 
+      - |
           VERSION=$(cat VERSION)
           echo "Pushing image as $DOCKERHUB_ROOT/sparketl:$VERSION..."
           docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:$VERSION
@@ -84,5 +81,5 @@ deployment:
           echo "Pushing image as $DOCKERHUB_ROOT/sparketl:${V[0]}.${V[1]}..."
           docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}"
           docker push $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}"
-      - >
+      - |
           docker push trueprint/docker-spark:latest
