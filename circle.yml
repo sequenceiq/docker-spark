@@ -51,7 +51,7 @@ test:
         -e CIRCLECI
         -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY
         -v /tmp/tests/output:/var/docker-spark/output
-        $DOCKERHUB_ROOT/$IMAGE
+        $DOCKERHUB_ROOT/$IMAGE testall
     - ls -l /tmp/tests/output
     - cp /tmp/tests/output/* $CIRCLE_TEST_REPORTS
 
@@ -95,4 +95,7 @@ deployment:
           docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}"
           docker push $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}"
       - |
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:beta
+          docker push $DOCKERHUB_ROOT/$IMAGE:beta
+      - | 
           docker push $DOCKERHUB_ROOT/$IMAGE:latest
