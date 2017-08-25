@@ -12,7 +12,8 @@ machine:
   services:
     - docker
   environment:
-    SRC : /home/ubuntu/spark-analytics
+    SRC:            /home/ubuntu/spark-analytics
+    DOCKERHUB_ROOT: trueprint
 
 dependencies:
   cache_directories:
