@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 export DOCKERSPARK_VERSION=`cat $SPARK_HOME/VERSION`
 logger -s "Using Docker-Spark v$DOCKERSPARK_VERSION" 2>&1 | tee $LOG_FILE
 

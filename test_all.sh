@@ -1,10 +1,12 @@
 #!/bin/bash
 
-set -e  # Abort on failure
+cd $SPARK_HOME
+
+set -e
 
 if [[ $AWS_ACCESS_KEY_ID && $AWS_SECRET_ACCESS_KEY ]]; then
     echo "Injecting AWS creds from environment variables..."
-    bash $HADOOP_CONF_DIR/install_creds.sh
+    bash ./install_creds.sh
 else
     echo "WARNING: AWS creds not found within environment variables..."
 fi
