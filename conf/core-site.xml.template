@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+  <property>
+    <name>fs.s3.canned.acl</name>
+    <value>BucketOwnerFullControl</value>
+  </property>
+  <property>
+    <name>fs.s3n.impl</name>
+    <value>org.apache.hadoop.fs.s3native.NativeS3FileSystem</value>
+  </property>
+  <property>
+    <name>fs.s3a.impl</name>
+    <value>org.apache.hadoop.fs.s3a.S3AFileSystem</value>
+  </property>
+  <property>
+    <name>fs.s3a.acl.default</name>
+    <value>BucketOwnerFullControl</value>
+    <description>
+      Set a canned ACL for newly created and copied objects. Value may be Private,
+      PublicRead, PublicReadWrite, AuthenticatedRead, LogDeliveryWrite, BucketOwnerRead,
+      or BucketOwnerFullControl.
+    </description>
+  </property>
+  <property>
+    <name>fs.s3a.fast.upload</name>
+    <value>true</value>
+    <description>
+      Use the incremental block upload mechanism with
+      the buffering mechanism set in fs.s3a.fast.upload.buffer.
+      The number of threads performing uploads in the filesystem is defined
+      by fs.s3a.threads.max; the queue of waiting uploads limited by
+      fs.s3a.max.total.tasks.
+      The size of each buffer is set by fs.s3a.multipart.size.
+    </description>
+  </property>
+</configuration>
