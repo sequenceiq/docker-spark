@@ -1,0 +1,101 @@
+general:
+  branches:
+    ignore:
+      - /paused.*/
+
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
+machine:
+  services:
+    - docker
+  environment:
+    SRC:            /home/ubuntu/spark-analytics
+    DOCKERHUB_ROOT: trueprint
+    IMAGE:          docker-spark
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+  pre:
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+    - mkdir -p ~/docker; if [[ -e ~/docker/image.tar ]]; then echo "Restoring cache..." && docker load -i ~/docker/image.tar; fi
+  override:
+    - echo `cat VERSION | sed -e "s/x/${CIRCLE_BUILD_NUM}/g"` > VERSION && echo "VERSION=$(cat VERSION)"
+    - docker pull ubuntu:15.04
+      # $IMAGE: Pull, Build, Cache:
+    - echo "Pull:";  docker pull $DOCKERHUB_ROOT/$IMAGE:circle-cache || true; docker tag -f $DOCKERHUB_ROOT/$IMAGE:circle-cache $DOCKERHUB_ROOT/$IMAGE:latest || true
+    - echo "Build:"; cd $SRC/$IMAGE; docker build --rm=false -t $DOCKERHUB_ROOT/$IMAGE .
+    - echo "Cache:"; docker tag -f $DOCKERHUB_ROOT/$IMAGE $DOCKERHUB_ROOT/$IMAGE:circle-cache && docker push $DOCKERHUB_ROOT/$IMAGE:circle-cache
+    # Save images and then update docker
+    - |
+        mkdir -p ~/docker
+        docker save $DOCKERHUB_ROOT/$IMAGE:circle-cache > ~/docker/image.tar
+    - |
+        docker version
+        sudo stop docker
+        curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+        sudo start docker
+        docker version
+      # Push empty file in tests/output
+    - mkdir -p /tmp/tests/output; touch /tmp/tests/output/this-is-a-test.txt
+
+
+test:
+  override:
+    - ls -l /tmp/tests/output
+    - >
+        docker run
+        -e CIRCLECI
+        -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY
+        -v /tmp/tests/output:/var/docker-spark/output
+        $DOCKERHUB_ROOT/$IMAGE testall
+    - ls -l /tmp/tests/output
+    - cp /tmp/tests/output/* $CIRCLE_TEST_REPORTS
+
+deployment:
+  beta:
+    branch: /(feat|hotfix)\/.*/
+    commands:
+        #Push docker images (beta):
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - |
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:beta
+          docker push $DOCKERHUB_ROOT/$IMAGE:beta
+      - |
+          BRANCHTAG=$(echo $CIRCLE_BRANCH | sed -e 's/\//_/g')
+          echo "Pushing image as '$DOCKERHUB_ROOT/$IMAGE:$BRANCHTAG'"
+          docker tag -f $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:$BRANCHTAG
+          docker push $DOCKERHUB_ROOT/$IMAGE:$BRANCHTAG
+      - |
+          VERSION=$(cat VERSION)
+          echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:$VERSION..."
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:$VERSION
+          docker push $DOCKERHUB_ROOT/$IMAGE:$VERSION
+      - |
+          VERSION=$(cat VERSION) && V=( ${VERSION//./ } )
+          echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:${V[0]}.${V[1]}-beta..."
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}-beta"
+          docker push $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}-beta"
+  prod:
+    branch: master
+    commands:
+        #Push docker images (prod):
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - |
+          VERSION=$(cat VERSION)
+          echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:$VERSION..."
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:$VERSION
+          docker push $DOCKERHUB_ROOT/$IMAGE:$VERSION
+      - |
+          VERSION=$(cat VERSION) && V=( ${VERSION//./ } )  # replace points, split into version array
+          echo "Pushing image as $DOCKERHUB_ROOT/$IMAGE:${V[0]}.${V[1]}..."
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}"
+          docker push $DOCKERHUB_ROOT/$IMAGE:"${V[0]}.${V[1]}"
+      - |
+          docker tag $DOCKERHUB_ROOT/$IMAGE:latest $DOCKERHUB_ROOT/$IMAGE:beta
+          docker push $DOCKERHUB_ROOT/$IMAGE:beta
+      - | 
+          docker push $DOCKERHUB_ROOT/$IMAGE:latest

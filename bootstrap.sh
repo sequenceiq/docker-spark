@@ -1,32 +1,37 @@
 #!/bin/bash
 
-: ${HADOOP_PREFIX:=/usr/local/hadoop}
+set -e
 
-$HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
-
-rm /tmp/*.pid
+export DOCKERSPARK_VERSION=`cat $SPARK_HOME/VERSION`
+logger -s "Using Docker-Spark v$DOCKERSPARK_VERSION" 2>&1 | tee $LOG_FILE
 
 # installing libraries if any - (resource urls added comma separated to the ACP system variable)
-cd $HADOOP_PREFIX/share/hadoop/common ; for cp in ${ACP//,/ }; do  echo == $cp; curl -LO $cp ; done; cd -
+cd $HADOOP_HOME/share/hadoop/common ; for cp in ${ACP//,/ }; do  echo == $cp; curl -LO $cp ; done; cd -
 
-# altering the core-site configuration
-sed s/HOSTNAME/$HOSTNAME/ /usr/local/hadoop/etc/hadoop/core-site.xml.template > /usr/local/hadoop/etc/hadoop/core-site.xml
+# customizing core-site.xml configuration
+sed s/HOSTNAME/$HOSTNAME/ $HADOOP_CONF_DIR/core-site.xml.template > $HADOOP_CONF_DIR/core-site.xml
 
 # setting spark defaults
-echo spark.yarn.jar hdfs:///spark/spark-assembly-1.6.0-hadoop2.6.0.jar > $SPARK_HOME/conf/spark-defaults.conf
-cp $SPARK_HOME/conf/metrics.properties.template $SPARK_HOME/conf/metrics.properties
+# cp $SPARK_HOME/conf/metrics.properties.template $SPARK_HOME/conf/metrics.properties
 
-service sshd start
-$HADOOP_PREFIX/sbin/start-dfs.sh
-$HADOOP_PREFIX/sbin/start-yarn.sh
+# Skip in standalone mode:
+#$HADOOP_HOME/sbin/start-dfs.sh
+#$HADOOP_HOME/sbin/start-yarn.sh
 
-
+if [[ ! -z $AWS_ACCESS_KEY_ID ]]; then
+	bash $SPARK_HOME/install_creds.sh
+fi
 
 CMD=${1:-"exit 0"}
-if [[ "$CMD" == "-d" ]];
+if [[ "$CMD" == testall ]]; then
+	bash $SPARK_HOME/test_all.sh
+elif [[ "$CMD" == "-d" ]];
 then
-	service sshd stop
-	/usr/sbin/sshd -D -d
+	echo "sshd service not yet supported"
+	exit 1
+	#service sshd start
+	#service sshd stop
+	#/usr/sbin/sshd -D -d
 else
 	/bin/bash -c "$*"
 fi
