@@ -142,9 +142,9 @@ RUN curl -s http://apache.cs.utah.edu/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.ta
     ln -s /usr/local/hadoop-2.7.3 /usr/local/hadoop
 
 # install spark bits:
-RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.7.tgz | tar -xz -C /usr/local/ && \
+RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-2.1.0-bin-hadoop2.7.tgz | tar -xz -C /usr/local/ && \
     cd /usr/local && \
-    ln -s spark-2.2.0-bin-hadoop2.7 spark
+    ln -s spark-2.1.0-bin-hadoop2.7 spark
 
 
 #####################################
