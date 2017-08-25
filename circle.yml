@@ -67,6 +67,16 @@ deployment:
           echo "Pushing image as 'trueprint/docker-spark:$BRANCHTAG'"
           docker tag -f trueprint/docker-spark:latest trueprint/docker-spark:$BRANCHTAG
           docker push trueprint/docker-spark:$BRANCHTAG
+      - |
+          VERSION=$(cat VERSION)
+          echo "Pushing image as $DOCKERHUB_ROOT/sparketl:$VERSION..."
+          docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:$VERSION
+          docker push $DOCKERHUB_ROOT/sparketl:$VERSION
+      - |
+          V=( ${VERSION//./ } )  # replace points, split into version array
+          echo "Pushing image as $DOCKERHUB_ROOT/sparketl:${V[0]}.${V[1]}-beta..."
+          docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}-beta"
+          docker push $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}-beta"
   prod:
     branch: master
     commands:
@@ -77,6 +87,7 @@ deployment:
           echo "Pushing image as $DOCKERHUB_ROOT/sparketl:$VERSION..."
           docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:$VERSION
           docker push $DOCKERHUB_ROOT/sparketl:$VERSION
+      - |
           V=( ${VERSION//./ } )  # replace points, split into version array
           echo "Pushing image as $DOCKERHUB_ROOT/sparketl:${V[0]}.${V[1]}..."
           docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}"
