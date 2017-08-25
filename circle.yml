@@ -77,7 +77,12 @@ deployment:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - > 
           VERSION=$(cat VERSION)
+          echo "Pushing image as $DOCKERHUB_ROOT/sparketl:$VERSION..."
           docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:$VERSION
           docker push $DOCKERHUB_ROOT/sparketl:$VERSION
+          V=( ${VERSION//./ } )  # replace points, split into version array
+          echo "Pushing image as $DOCKERHUB_ROOT/sparketl:${V[0]}.${V[1]}..."
+          docker tag $DOCKERHUB_ROOT/sparketl:latest $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}"
+          docker push $DOCKERHUB_ROOT/sparketl:"${V[0]}.${V[1]}"
       - >
           docker push trueprint/docker-spark:latest
