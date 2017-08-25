@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export DOCKERSPARK_VERSION=`cat $SPARK_HOME/VERSION`
+logger -s "Using Docker-Spark v$DOCKERSPARK_VERSION" 2>&1 | tee $LOG_FILE
+
 # installing libraries if any - (resource urls added comma separated to the ACP system variable)
 cd $HADOOP_HOME/share/hadoop/common ; for cp in ${ACP//,/ }; do  echo == $cp; curl -LO $cp ; done; cd -
 
