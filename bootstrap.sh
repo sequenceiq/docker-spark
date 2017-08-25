@@ -19,7 +19,7 @@ fi
 
 CMD=${1:-"exit 0"}
 if [[ "$CMD" == testall ]]; then
-	bash $SPARK_HOME/testall.sh
+	bash $SPARK_HOME/test_all.sh
 elif [[ "$CMD" == "-d" ]];
 then
 	echo "sshd service not yet supported"
