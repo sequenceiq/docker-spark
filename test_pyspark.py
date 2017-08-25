@@ -1,7 +1,7 @@
 import os
 from pyspark.sql import SparkSession
 
-print("Beginning PySpark test...")
+print("\nBeginning PySpark test...\n")
 
 def print_env_var_debug(env_var):
     print("ENV VAR DEBUG: {}={}".format(

@@ -5,14 +5,6 @@
 
 set -e
 
-echo "Content of core-site.xml is:"
-cat $HADOOP_CONF_DIR/core-site.xml
-
-#echo "DEBUG: Installing S3 creds..."
-#bash $HADOOP_CONF_DIR/install_creds.sh
-# Uncomment to debug:
-# cat $HADOOP_CONF_DIR/core-site.xml
-
-echo "Testing S3 bucket access..."
+echo -e "\nTesting S3 bucket access...\n"
 set -v
 hadoop fs -ls "s3n://arivale-bi-extracts-6n2ynm/software/"

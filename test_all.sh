@@ -13,18 +13,18 @@ fi
 
 set +e  # Resume on failure
 
-echo "Executing test_hadoop.sh..."
+echo -e "\nExecuting test_hadoop.sh...\n"
 bash ./test_hadoop.sh
 HADOOP_RESULT=$?
 
-echo "Executing test_pyspark.py..."
+echo -e "\nExecuting test_pyspark.py...\n"
 python2.7 ./test_pyspark.py
 PYSPARK_RESULT=$?
 
 set -e  # Abort on failure
 
 if [[ $HADOOP_RESULT -eq 0 && $PYSPARK_RESULT -eq 0 ]]; then
-    echo "All tests completed successfully!"
+    echo -e "\nAll tests completed successfully!\n"
 else
     if [[ $HADOOP_RESULT -ne 0 ]]; then
         echo "ERROR: test_hadoop.sh failed with code $HADOOP_RESULT"
