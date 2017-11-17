@@ -10,12 +10,12 @@ The base Hadoop Docker image is also available as an official [Docker image](htt
 
 ##Pull the image from Docker Repository
 ```
-docker pull sequenceiq/spark:2.0.0
+docker pull sequenceiq/spark:2.1.0
 ```
 
 ## Building the image
 ```
-docker build --rm -t sequenceiq/spark:2.0.0
+docker build --rm -t sequenceiq/spark:2.1.0
 ```
 
 ## Running the image
@@ -24,16 +24,16 @@ docker build --rm -t sequenceiq/spark:2.0.0
 * in your /etc/hosts file add $(boot2docker ip) as host 'sandbox' to make it easier to access your sandbox UI
 * open yarn UI ports when running container
 ```
-docker run -it -p 8088:8088 -p 8042:8042 -p 4040:4040 -h sandbox sequenceiq/spark:2.0.0 bash
+docker run -it -p 8088:8088 -p 8042:8042 -p 4040:4040 -h sandbox sequenceiq/spark:2.1.0 bash
 ```
 or
 ```
-docker run -d -h sandbox sequenceiq/spark:2.0.0 -d
+docker run -d -h sandbox sequenceiq/spark:2.1.0 -d
 ```
 
 ## Versions
 ```
-Hadoop 2.7.0 and Apache Spark v2.0.0 on Centos
+Hadoop 2.7.0 and Apache Spark v2.1.0 on Centos
 ```
 
 ## Testing
@@ -47,7 +47,7 @@ In yarn-client mode, the driver runs in the client process, and the application 
 ```
 # run the spark shell
 spark-shell \
---master yarn-client \
+--master yarn \
 --driver-memory 1g \
 --executor-memory 1g \
 --executor-cores 1
@@ -66,26 +66,17 @@ Estimating Pi (yarn-cluster mode):
 # note you must specify --files argument in cluster mode to enable metrics
 spark-submit \
 --class org.apache.spark.examples.SparkPi \
---files $SPARK_HOME/conf/metrics.properties \
---master yarn-cluster \
+--master yarn \
 --driver-memory 1g \
 --executor-memory 1g \
 --executor-cores 1 \
-$SPARK_HOME/lib/spark-examples-2.0.0-hadoop2.7.0.jar
+$SPARK_HOME/examples/jars/spark-examples*.jar
 ```
 
-Estimating Pi (yarn-client mode):
 
-```
-# execute the the following command which should print the "Pi is roughly 3.1418" to the screen
-spark-submit \
---class org.apache.spark.examples.SparkPi \
---master yarn-client \
---driver-memory 1g \
---executor-memory 1g \
---executor-cores 1 \
-$SPARK_HOME/lib/spark-examples-2.0.0-hadoop2.7.0.jar
-```
+### View Result in hadoop
+
+visit `http://localhost:8088`
 
 ### Submitting from the outside of the container
 To use Spark from outside of the container it is necessary to set the YARN_CONF_DIR environment variable to directory with a configuration appropriate for the docker. The repository contains such configuration in the yarn-remote-client directory.
