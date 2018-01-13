@@ -8,14 +8,14 @@ Apache Spark on Docker
 This repository contains a Docker file to build a Docker image with Apache Spark. This Docker image depends on our previous [Hadoop Docker](https://github.com/sequenceiq/hadoop-docker) image, available at the SequenceIQ [GitHub](https://github.com/sequenceiq) page.
 The base Hadoop Docker image is also available as an official [Docker image](https://registry.hub.docker.com/u/sequenceiq/hadoop-docker/).
 
-##Pull the image from Docker Repository
+## Pull the image from Docker Repository
 ```
-docker pull sequenceiq/spark:2.1.0
+docker pull sequenceiq/spark:2.2.0
 ```
 
 ## Building the image
 ```
-docker build --rm -t sequenceiq/spark:2.1.0
+docker build --rm -t sequenceiq/spark:2.2.0
 ```
 
 ## Running the image
@@ -24,16 +24,16 @@ docker build --rm -t sequenceiq/spark:2.1.0
 * in your /etc/hosts file add $(boot2docker ip) as host 'sandbox' to make it easier to access your sandbox UI
 * open yarn UI ports when running container
 ```
-docker run -it -p 8088:8088 -p 8042:8042 -p 4040:4040 -h sandbox sequenceiq/spark:2.1.0 bash
+docker run -it -p 8088:8088 -p 8042:8042 -p 4040:4040 -h sandbox sequenceiq/spark:2.2.0 bash
 ```
 or
 ```
-docker run -d -h sandbox sequenceiq/spark:2.1.0 -d
+docker run -d -h sandbox sequenceiq/spark:2.2.0 -d
 ```
 
 ## Versions
 ```
-Hadoop 2.7.0 and Apache Spark v2.1.0 on Centos
+Hadoop 2.7.0 and Apache Spark v2.2.0 on Centos
 ```
 
 ## Testing
