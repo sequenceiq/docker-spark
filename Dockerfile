@@ -1,7 +1,7 @@
-FROM sequenceiq/hadoop-docker:2.7.0
-MAINTAINER SequenceIQ
+FROM yohei1126/hadoop-docker:2.7.1
+MAINTAINER yohei1126
 
-#support for Hadoop 2.7.0
+#support for Hadoop 2.7.1
 RUN curl -s http://d3kbcqa49mib13.cloudfront.net/spark-2.2.0-bin-hadoop2.7.tgz | tar -xz -C /usr/local/
 RUN cd /usr/local && ln -s spark-2.2.0-bin-hadoop2.7 spark
 ENV SPARK_HOME /usr/local/spark
